@@ -1,4 +1,7 @@
 package com.jhia.lab26.taskmaster.repositories;
 
-public class TaskRepository {
+import com.jhia.lab26.taskmaster.models.Task;
+import org.springframework.data.repository.CrudRepository;
+
+public interface TaskRepository extends CrudRepository<Task, String> {
 }
