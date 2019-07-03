@@ -17,6 +17,15 @@ public class TaskController {
         return (List) taskRepository.findAll();
     }
 
+    @PostMapping("/tasks")
+    public void addTask(
+        @PathVariable String title,
+        @PathVariable String description
+    ) {
+        Task task = new Task(title, description, "available");
+        taskRepository.save(task);
+    }
+
     @PatchMapping("/tasks/{id}/status")
     public Task patchStatus(@PathVariable String id) {
         Task task = taskRepository.findById(id).get();
