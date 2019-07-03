@@ -12,6 +12,11 @@ public class TaskController {
     @Autowired
     TaskRepository taskRepository;
 
+    @GetMapping("/")
+    public String getHello() {
+        return "welcome to Task Master";
+    }
+
     @GetMapping("/tasks")
     public List<Task> getAllTasks() {
         return (List) taskRepository.findAll();
