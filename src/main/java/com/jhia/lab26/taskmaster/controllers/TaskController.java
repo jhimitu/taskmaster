@@ -3,9 +3,9 @@ package com.jhia.lab26.taskmaster.controllers;
 import com.jhia.lab26.taskmaster.models.Task;
 import com.jhia.lab26.taskmaster.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 public class TaskController {
@@ -18,8 +18,10 @@ public class TaskController {
     }
 
     @GetMapping("/tasks")
-    public List<Task> getAllTasks() {
-        return (List) taskRepository.findAll();
+    public ResponseEntity<Task> getAllTasks() {
+        Iterable<Task> tasks = taskRepository.findAll();
+        System.out.println(tasks);
+        return new ResponseEntity(tasks, HttpStatus.OK);
     }
 
     @PostMapping("/tasks")

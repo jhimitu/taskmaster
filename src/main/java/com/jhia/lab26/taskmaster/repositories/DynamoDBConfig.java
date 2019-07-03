@@ -4,18 +4,20 @@ import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSCredentialsProvider;
 import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
+import com.amazonaws.regions.Region;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import org.socialsignin.spring.data.dynamodb.repository.config.EnableDynamoDBRepositories;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 @Configuration
 @EnableDynamoDBRepositories(basePackages = "com.jhia.lab26.taskmaster")
 public class DynamoDBConfig {
-
     @Value("${amazon.dynamodb.endpoint}")
     private String amazonDynamoDBEndpoint;
 
@@ -26,38 +28,20 @@ public class DynamoDBConfig {
     private String amazonAWSSecretKey;
 
     @Bean
-    public AmazonDynamoDB amazonDynamoDB(){
-        AmazonDynamoDB amazonDynamoDB;
+    public AmazonDynamoDB amazonDynamoDB() {
+        AmazonDynamoDB amazonDynamoDB
+                = new AmazonDynamoDBClient(amazonAWSCredentials());
+        amazonDynamoDB.setRegion(Region.getRegion(Regions.US_EAST_2));
 
-        if (amazonDynamoDBEndpoint.isEmpty()) {
-            amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
-                    .withCredentials(credentialsProvider())
-                    .withRegion(Regions.US_EAST_1)
-                    .build();
-            System.out.println("connecting to remote dynamo in region: " + Regions.US_EAST_1);
-        } else {
-            amazonDynamoDB = AmazonDynamoDBClientBuilder.standard()
-                    .withEndpointConfiguration(
-                            new AwsClientBuilder.EndpointConfiguration("http://localhost:8000", "us-east-2"))
-                    .build();
-            System.out.println("connecting to dynamo at endpoint: "+ amazonDynamoDBEndpoint);
+        if (!StringUtils.isEmpty(amazonDynamoDBEndpoint)) {
+            amazonDynamoDB.setEndpoint(amazonDynamoDBEndpoint);
         }
 
         return amazonDynamoDB;
     }
 
-
-    public AWSCredentialsProvider credentialsProvider() {
-        return new AWSCredentialsProvider() {
-            @Override
-            public AWSCredentials getCredentials() {
-                return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
-            }
-
-            @Override
-            public void refresh() {
-
-            }
-        };
+    @Bean
+    public AWSCredentials amazonAWSCredentials() {
+        return new BasicAWSCredentials(amazonAWSAccessKey, amazonAWSSecretKey);
     }
 }
