@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 public class TaskController {
     @Autowired
@@ -25,18 +27,19 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public void addTask(
-        @PathVariable String title,
-        @PathVariable String description
+    public ResponseEntity<Task> addTask(
+        String title,
+        String description
     ) {
         Task task = new Task(title, description, "available");
         taskRepository.save(task);
+        return new ResponseEntity(task, HttpStatus.OK);
     }
 
     @PatchMapping("/tasks/{id}/status")
-    public Task patchStatus(@PathVariable String id) {
+    public Task patchStatus(@PathVariable UUID id, String status) {
         Task task = taskRepository.findById(id).get();
-//        task.toggleCompletedStatus();
+        task.toggleCompletedStatus(status);
         taskRepository.save(task);
         return task;
     }

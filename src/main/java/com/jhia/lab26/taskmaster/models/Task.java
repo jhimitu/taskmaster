@@ -4,7 +4,7 @@ import com.amazonaws.services.dynamodbv2.datamodeling.*;
 
 import java.util.UUID;
 
-@DynamoDBTable(tableName = "taskmaster")
+@DynamoDBTable(tableName = "TaskMaster")
 public class Task {
     private UUID id;
     private String title;
@@ -53,7 +53,10 @@ public class Task {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status) { this.status = status; }
+
+    public String toggleCompletedStatus(String status) {
         this.status = status;
+        return this.status;
     }
 }
