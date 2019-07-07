@@ -25,12 +25,13 @@ public class TaskController {
     }
 
     @PostMapping("/tasks")
-    public void addTask(
-        @PathVariable String title,
-        @PathVariable String description
+    public ResponseEntity<Task> addTask(
+        String title,
+        String description
     ) {
         Task task = new Task(title, description, "available");
         taskRepository.save(task);
+        return new ResponseEntity(task, HttpStatus.OK);
     }
 
     @PatchMapping("/tasks/{id}/status")
