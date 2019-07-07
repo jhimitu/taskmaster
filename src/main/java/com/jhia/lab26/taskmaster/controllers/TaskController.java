@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 public class TaskController {
     @Autowired
@@ -35,9 +37,9 @@ public class TaskController {
     }
 
     @PatchMapping("/tasks/{id}/status")
-    public Task patchStatus(@PathVariable String id) {
+    public Task patchStatus(@PathVariable UUID id, String status) {
         Task task = taskRepository.findById(id).get();
-//        task.toggleCompletedStatus();
+        task.toggleCompletedStatus(status);
         taskRepository.save(task);
         return task;
     }

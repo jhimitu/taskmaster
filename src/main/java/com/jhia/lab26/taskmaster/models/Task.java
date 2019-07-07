@@ -53,7 +53,10 @@ public class Task {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(String status) { this.status = status; }
+
+    public String toggleCompletedStatus(String status) {
         this.status = status;
+        return this.status;
     }
 }
