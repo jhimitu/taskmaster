@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,9 +32,23 @@ public class TaskController {
         String title,
         String description
     ) {
-        Task task = new Task(title, description, "available");
+        Task task = new Task(title, description, "none", "available");
         taskRepository.save(task);
         return new ResponseEntity(task, HttpStatus.OK);
+    }
+
+    @GetMapping("/users/{name}/tasks")
+    public ResponseEntity<Task> getAssigneeTasks(@PathVariable String name) {
+        List<Task> tasks = taskRepository.findAllByAssignee(name);
+        return new ResponseEntity(tasks, HttpStatus.OK);
+    }
+
+    @PatchMapping("/tasks/{id}/assign/{assignee}")
+    public Task assignTask(@PathVariable UUID id, String assignee) {
+        Task task = taskRepository.findById(id).get();
+        task.assign(assignee);
+        taskRepository.save(task);
+        return task;
     }
 
     @PatchMapping("/tasks/{id}/status")

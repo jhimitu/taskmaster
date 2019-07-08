@@ -9,13 +9,15 @@ public class Task {
     private UUID id;
     private String title;
     private String description;
+    private String assignee;
     private String status;
 
     public Task() {};
 
-    public Task(String title, String description, String status) {
+    public Task(String title, String description, String assignee, String status) {
         this.title = title;
         this.description = description;
+        this.assignee = assignee;
         this.status = status;
     }
 
@@ -24,7 +26,6 @@ public class Task {
     public UUID getId() {
         return id;
     }
-
 
     public void setId(UUID id) {
         this.id = id;
@@ -49,6 +50,11 @@ public class Task {
     }
 
     @DynamoDBAttribute
+    public String getAssignee() { return assignee; }
+
+    public void setAssignee(String assignee) { this.assignee = assignee; }
+
+    @DynamoDBAttribute
     public String getStatus() {
         return status;
     }
@@ -58,5 +64,10 @@ public class Task {
     public String toggleCompletedStatus(String status) {
         this.status = status;
         return this.status;
+    }
+
+    public String assign(String assignee) {
+        this.assignee = assignee;
+        return this.assignee;
     }
 }

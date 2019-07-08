@@ -11,4 +11,5 @@ import java.util.UUID;
 @EnableScan
 public interface TaskRepository extends CrudRepository<Task, String> {
     Optional<Task> findById(UUID id);
+    List<Task> findAllByAssignee(String name);
 }
