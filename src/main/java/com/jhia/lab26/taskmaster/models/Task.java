@@ -9,6 +9,7 @@ public class Task {
     private UUID id;
     private String title;
     private String description;
+    private String assignee;
     private String status;
 
     public Task() {};
@@ -24,7 +25,6 @@ public class Task {
     public UUID getId() {
         return id;
     }
-
 
     public void setId(UUID id) {
         this.id = id;
@@ -47,6 +47,11 @@ public class Task {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @DynamoDBAttribute
+    public String getAssignee() { return assignee; }
+
+    public void setAssignee(String assignee) { this.assignee = assignee; }
 
     @DynamoDBAttribute
     public String getStatus() {
