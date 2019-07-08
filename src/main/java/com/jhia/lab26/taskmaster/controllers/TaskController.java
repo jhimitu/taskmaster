@@ -43,6 +43,14 @@ public class TaskController {
         return new ResponseEntity(tasks, HttpStatus.OK);
     }
 
+    @PatchMapping("/tasks/{id}/assign/{assignee}")
+    public Task assignTask(@PathVariable UUID id, String assignee) {
+        Task task = taskRepository.findById(id).get();
+        task.assign(assignee);
+        taskRepository.save(task);
+        return task;
+    }
+
     @PatchMapping("/tasks/{id}/status")
     public Task patchStatus(@PathVariable UUID id, String status) {
         Task task = taskRepository.findById(id).get();

@@ -65,4 +65,9 @@ public class Task {
         this.status = status;
         return this.status;
     }
+
+    public String assign(String assignee) {
+        this.assignee = assignee;
+        return this.assignee;
+    }
 }
