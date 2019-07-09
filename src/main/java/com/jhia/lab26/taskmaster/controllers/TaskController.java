@@ -15,11 +15,13 @@ public class TaskController {
     @Autowired
     TaskRepository taskRepository;
 
+    @CrossOrigin
     @GetMapping("/")
     public String getHello() {
         return "welcome to Task Master";
     }
 
+    @CrossOrigin
     @GetMapping("/tasks")
     public ResponseEntity<Task> getAllTasks() {
         Iterable<Task> tasks = taskRepository.findAll();
@@ -27,6 +29,7 @@ public class TaskController {
         return new ResponseEntity(tasks, HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PostMapping("/tasks")
     public ResponseEntity<Task> addTask(
         String title,
@@ -37,12 +40,14 @@ public class TaskController {
         return new ResponseEntity(task, HttpStatus.OK);
     }
 
+    @CrossOrigin
     @GetMapping("/users/{name}/tasks")
     public ResponseEntity<Task> getAssigneeTasks(@PathVariable String name) {
         List<Task> tasks = taskRepository.findAllByAssignee(name);
         return new ResponseEntity(tasks, HttpStatus.OK);
     }
 
+    @CrossOrigin
     @PatchMapping("/tasks/{id}/assign/{assignee}")
     public Task assignTask(@PathVariable UUID id, String assignee) {
         Task task = taskRepository.findById(id).get();
@@ -51,6 +56,7 @@ public class TaskController {
         return task;
     }
 
+    @CrossOrigin
     @PatchMapping("/tasks/{id}/status")
     public Task patchStatus(@PathVariable UUID id, String status) {
         Task task = taskRepository.findById(id).get();
