@@ -1,11 +1,13 @@
 package com.jhia.lab26.taskmaster.controllers;
 
 import com.jhia.lab26.taskmaster.models.Task;
+import com.jhia.lab26.taskmaster.repositories.S3Upload;
 import com.jhia.lab26.taskmaster.repositories.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.UUID;
@@ -13,6 +15,14 @@ import java.util.UUID;
 @CrossOrigin
 @RestController
 public class TaskController {
+
+    private S3Upload s3Upload;
+
+    @Autowired
+    TaskController(S3Upload s3Upload) {
+        this.s3Upload = s3Upload;
+    }
+
     @Autowired
     TaskRepository taskRepository;
 
@@ -65,4 +75,19 @@ public class TaskController {
         taskRepository.save(task);
         return task;
     }
+
+    @PostMapping("/tasks/{id}/images")
+    public ResponseEntity uploadImage(
+        @PathVariable UUID id,
+        @RequestPart(value = "file") MultipartFile file
+        ) {
+
+        Task task = taskRepository.findById(id).get();
+
+        String image = this.s3Upload.uploadFile(file);
+        task.setImageURL(image);
+        taskRepository.save(task);
+        return new ResponseEntity(task, HttpStatus.OK);
+    }
+
 }

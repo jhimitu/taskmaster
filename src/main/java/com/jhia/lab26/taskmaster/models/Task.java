@@ -11,6 +11,7 @@ public class Task {
     private String description;
     private String assignee;
     private String status;
+    private String imageURL;
 
     public Task() {};
 
@@ -60,6 +61,15 @@ public class Task {
     }
 
     public void setStatus(String status) { this.status = status; }
+
+    @DynamoDBAttribute
+    public String getImageURL() {
+        return imageURL;
+    }
+
+    public void setImageURL(String imageURL) {
+        this.imageURL = imageURL;
+    }
 
     public String toggleCompletedStatus(String status) {
         this.status = status;
